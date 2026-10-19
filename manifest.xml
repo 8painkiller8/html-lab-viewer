@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ContentApp">
+<Id>c98442c3-06b2-49b0-b288-bbdc95556b46</Id>
+<Version>1.1.0.0</Version>
+<ProviderName>Marine Physics Teaching Lab</ProviderName>
+<DefaultLocale>en-US</DefaultLocale>
+<DisplayName DefaultValue="HTML Lab Viewer"/>
+<Description DefaultValue="Select a local HTML file to display inside PowerPoint. Selected files are not uploaded by this viewer."/>
+<Hosts><Host Name="Presentation"/></Hosts>
+<DefaultSettings>
+<SourceLocation DefaultValue="https://8painkiller8.github.io/html-lab-viewer/index.html"/>
+<RequestedWidth>1000</RequestedWidth>
+<RequestedHeight>600</RequestedHeight>
+</DefaultSettings>
+<Permissions>Restricted</Permissions>
+</OfficeApp>
