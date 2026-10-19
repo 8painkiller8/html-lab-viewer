@@ -6,6 +6,7 @@
 <title>HTML Lab Viewer</title>
 <style>
 *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:system-ui,-apple-system,sans-serif;color:#173247;background:#f3f6f8}body{display:flex;flex-direction:column}header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #cad5dd;background:white}button{font:inherit;font-size:14px;padding:8px 12px;border:1px solid #a9bac6;border-radius:5px;background:white;cursor:pointer}button.primary{background:#174d70;color:white;border-color:#174d70}button:focus-visible{outline:3px solid #e49c24;outline-offset:2px}#filename{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:38vw}#status{margin:0;padding:6px 14px;font-size:12px;background:#e9f0f5}iframe{width:100%;flex:1;border:0;min-height:0;background:white}#show{display:none;position:fixed;right:8px;top:8px;z-index:10;opacity:.85}body.clean header,body.clean #status{display:none}body.clean #show{display:block}[hidden]{display:none!important}
+#viewport{flex:1;min-height:0;overflow:auto;position:relative}#surface{position:relative;margin:auto}iframe{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none}#fit[aria-pressed="true"]{background:#dceefa}header{gap:7px}#filename{max-width:180px}button{padding:6px 9px}
 </style>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" async></script>
 </head>
@@ -15,39 +16,11 @@
 <input id="file" type="file" accept=".html,.htm,text/html" hidden>
 <span id="filename">No file selected</span>
 <button id="reset" type="button">Clear file</button>
-<button id="hide" type="button">Hide controls</button>
+<button id="save" type="button">Save in presentation</button><button id="out" aria-label="Zoom out" type="button">−</button><span id="zoom">100%</span><button id="in" aria-label="Zoom in" type="button">+</button><button id="fit" type="button" aria-pressed="true">Fit to window</button><button id="hide" type="button">Hide controls</button>
 </header>
 <p id="status" role="status" aria-live="polite">Choose a self-contained HTML file. External libraries may need internet.</p>
 <button id="show" type="button">Show controls</button>
-<iframe id="viewer" title="Interactive HTML lab" sandbox="allow-scripts allow-downloads" allow="fullscreen"></iframe>
-<script>
-'use strict';
-const picker=document.getElementById('file'), viewer=document.getElementById('viewer');
-const label=document.getElementById('filename'), status=document.getElementById('status');
-let revision=0;
-function display(html,name){
- viewer.srcdoc=html;
- label.textContent=name;
- status.textContent='Loaded locally. Selected files are not saved in the presentation; choose the file again after reopening. Files that use nearby images or scripts need to be made self-contained.';
-}
-document.getElementById('choose').addEventListener('click',()=>{picker.value='';picker.click();});
-picker.addEventListener('change',async()=>{
- const file=picker.files[0]; if(!file)return;
- const current=++revision;
- if(!/\.html?$/i.test(file.name)){status.textContent='Please select an .html or .htm file.';return;}
- if(file.size>25*1024*1024){status.textContent='Please select an HTML file smaller than 25 MB.';return;}
- try{const html=await file.text();if(current===revision)display(html,file.name);}
- catch(error){if(current===revision)status.textContent='Could not read the file. Please choose it again.';}
-});
-function clearFile(){
- ++revision; picker.value=''; viewer.srcdoc=''; label.textContent='No file selected';
- status.textContent='Choose an HTML file from your Mac. This viewer does not upload or save it. Only open files you trust; their scripts can access external services.';
-}
-document.getElementById('reset').addEventListener('click',clearFile);
-document.getElementById('hide').addEventListener('click',()=>document.body.classList.add('clean'));
-document.getElementById('show').addEventListener('click',()=>document.body.classList.remove('clean'));
-window.addEventListener('load',()=>{if(window.Office)Office.onReady(()=>{});});
-clearFile();
-</script>
+<div id="viewport"><div id="surface"><iframe id="viewer" title="Interactive HTML lab" sandbox="allow-scripts allow-downloads" allow="fullscreen"></iframe></div></div>
+<script src="viewer.js"></script>
 </body>
 </html>
